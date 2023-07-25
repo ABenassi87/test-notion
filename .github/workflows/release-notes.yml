@@ -31,7 +31,7 @@ jobs:
         uses: infinitaslearning/notion-release-notes@main
         with:
           token: ${{ secrets.NOTION_TOKEN }}
-          database: ${{ secrets.DB_NOTION }}
+          database: a2eea1d316a74bac9e698f73c3fe1f47
           name: ${{ github.event.head_commit.message }}
           tags: ${{ github.ref_name }}
           body: ${{ steps.get_diffs.outputs.changelog }}
