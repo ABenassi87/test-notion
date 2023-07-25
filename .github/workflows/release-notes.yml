@@ -21,8 +21,8 @@ jobs:
         run: |
           git fetch
           GitDiffs=$(env -i git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative origin/$ENV..origin/$MASTER)
-          echo $GitDiffs
-          echo "::set-output name=changelog::$GitDiffs"
+          echo "$GitDiffs"
+          echo "changelog=$GitDiffs" >> $GITHUB_OUTPUT
         env:
           ENV: ${{ github.ref_name }}
           MASTER: "main"
@@ -31,7 +31,7 @@ jobs:
         id: vars
         run: |
           calculatedSha=$(git rev-parse --short ${{ github.sha }})
-          echo "::set-output name=short_sha::$calculatedSha"
+          echo "short_sha=$calculatedSha" >> $GITHUB_OUTPUT
       - name: Notion release notes
         uses: infinitaslearning/notion-release-notes@main
         with:
