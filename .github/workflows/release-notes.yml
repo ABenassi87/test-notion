@@ -39,4 +39,4 @@ jobs:
           database: ${{ secrets.DB_NOTION }}
           name: ${{ steps.vars.outputs.short_sha }}
           tags: ${{ github.ref_name }}
-          body: ${{ steps.get_diffs.outputs.changelog }}
+          body: "Test"
