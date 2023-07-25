@@ -20,7 +20,7 @@ jobs:
         id: get_diffs
         run: |
           git fetch
-          GitDiffs=$(env -i git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative origin/$CI_COMMIT_BEFORE_SHA..origin/$CI_COMMIT_SHA)
+          GitDiffs=$(env -i git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative $CI_COMMIT_BEFORE_SHA..$CI_COMMIT_SHA)
           echo "$GitDiffs"
           echo "changelog=$GitDiffs" >> $GITHUB_OUTPUT
         env:
