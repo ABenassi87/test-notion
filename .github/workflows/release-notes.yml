@@ -20,17 +20,23 @@ jobs:
         id: get_diffs
         run: |
           git fetch
-          echo "changelog=$(env -i git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative origin/$ENV..origin/$MASTER)" >> $GITHUB_OUTPUT
+          GitDiffs=$(env -i git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative origin/$ENV..origin/$MASTER)"
+          echo $GitDiffs
+          echo "::set-output name=changelog::$GitDiffs"
         env:
           ENV: ${{ github.ref_name }}
           MASTER: "main"
 
-      # Runs a set of commands using the runners shell
+      - name: Set short git commit SHA
+        id: vars
+        run: |
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          echo "::set-output name=short_sha::$calculatedSha"
       - name: Notion release notes
         uses: infinitaslearning/notion-release-notes@main
         with:
           token: ${{ secrets.NOTION_TOKEN }}
           database: ${{ secrets.DB_NOTION }}
-          name: ${{ github.event.head_commit.sha }}
+          name: ${{ steps.vars.outputs.short_sha }}
           tags: ${{ github.ref_name }}
           body: ${{ steps.get_diffs.outputs.changelog }}
